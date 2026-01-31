@@ -251,8 +251,8 @@ contract PreLiquidationErrorTest is BaseTest {
         Position memory position = MORPHO.position(id, BORROWER);
 
         uint256 ltv = borrowAmount.wDivUp(collateralQuoted);
-        uint256 closeFactor = _closeFactor(preLiquidationParams, ltv);
-        uint256 repayableShares = uint256(position.borrowShares).wMulDown(closeFactor);
+        uint256 preLCF = _preLCF(preLiquidationParams, ltv);
+        uint256 repayableShares = uint256(position.borrowShares).wMulDown(preLCF);
 
         repaidShares = bound(repaidShares, repayableShares + 1, type(uint128).max);
         vm.expectRevert(
@@ -291,11 +291,11 @@ contract PreLiquidationErrorTest is BaseTest {
 
         uint256 ltv = borrowAmount.wDivUp(collateralQuoted);
 
-        uint256 closeFactor = _closeFactor(preLiquidationParams, ltv);
+        uint256 preLCF = _preLCF(preLiquidationParams, ltv);
         uint256 preLIF = _preLIF(preLiquidationParams, ltv);
         uint256 collateralPrice = IOracle(preLiquidationParams.preLiquidationOracle).price();
 
-        uint256 repayableShares = uint256(position.borrowShares).wMulDown(closeFactor);
+        uint256 repayableShares = uint256(position.borrowShares).wMulDown(preLCF);
         uint256 upperSeizedAssetBound = (repayableShares + 1).toAssetsUp(
             market.totalBorrowAssets, market.totalBorrowShares
         ).mulDivUp(preLIF, WAD).mulDivUp(ORACLE_PRICE_SCALE, collateralPrice);

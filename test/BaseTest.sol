@@ -131,20 +131,20 @@ contract BaseTest is Test {
         loanToken.approve(address(preLiquidation), type(uint256).max);
     }
 
-    function _closeFactor(PreLiquidationParams memory preLiquidationParams, uint256 ltv)
-        internal
-        view
-        returns (uint256)
+    function _preLCF(PreLiquidationParams memory preLiquidationParams, uint256 ltv) // Renamed for clarity
+     internal
+     view
+     returns (uint256)
     {
-        return (ltv - preLiquidationParams.preLltv).wDivDown(marketParams.lltv - preLiquidationParams.preLltv).wMulDown(
-            preLiquidationParams.preLCF2 - preLiquidationParams.preLCF1
-        ) + preLiquidationParams.preLCF1;
+        uint256 quotient = (ltv - preLiquidationParams.preLltv).wDivDown(marketParams.lltv - preLiquidationParams.preLltv);
+        uint256 qPow2 = quotient.mulDivDown(quotient, WAD);
+        return preLiquidationParams.preLCF1 + (preLiquidationParams.preLCF2 - preLiquidationParams.preLCF1).mulDivDown(qPow2, WAD);
     }
 
     function _preLIF(PreLiquidationParams memory preLiquidationParams, uint256 ltv) internal view returns (uint256) {
-        return (ltv - preLiquidationParams.preLltv).wDivDown(marketParams.lltv - preLiquidationParams.preLltv).wMulDown(
-            preLiquidationParams.preLIF2 - preLiquidationParams.preLIF1
-        ) + preLiquidationParams.preLIF1;
+        uint256 quotient = (ltv - preLiquidationParams.preLltv).wDivDown(marketParams.lltv - preLiquidationParams.preLltv);
+        uint256 qPow2 = quotient.mulDivDown(quotient, WAD);
+        return preLiquidationParams.preLIF1 + (preLiquidationParams.preLIF2 - preLiquidationParams.preLIF1).mulDivDown(qPow2, WAD);
     }
 
     function _getBorrowBounds(

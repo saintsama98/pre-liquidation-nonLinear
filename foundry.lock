@@ -5,6 +5,12 @@
   "lib/morpho-blue": {
     "rev": "3de2df4eb94c3f6118963039d4f177839a228e2a"
   },
+  "lib/openzeppelin-contracts": {
+    "tag": {
+      "name": "v5.5.0",
+      "rev": "fcbae5394ae8ad52d8e580a3477db99814b9d565"
+    }
+  },
   "lib/solmate": {
     "rev": "97bdb2003b70382996a79a406813f76417b1cf90"
   }

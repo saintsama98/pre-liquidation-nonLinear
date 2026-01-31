@@ -8,7 +8,7 @@ import {IMorpho, Id} from "../lib/morpho-blue/src/interfaces/IMorpho.sol";
 import {ErrorsLib} from "./libraries/ErrorsLib.sol";
 import {EventsLib} from "./libraries/EventsLib.sol";
 
-import {PreLiquidation} from "./PreLiquidation.sol";
+import {PreLiquidationCurve} from "./PreLiquidation-curve.sol";
 
 /// @title PreLiquidationFactory
 /// @author Morpho Labs
@@ -45,7 +45,7 @@ contract PreLiquidationFactory is IPreLiquidationFactory {
         returns (IPreLiquidation)
     {
         IPreLiquidation preLiquidation =
-            IPreLiquidation(address(new PreLiquidation{salt: 0}(address(MORPHO), id, preLiquidationParams)));
+            IPreLiquidation(address(new PreLiquidationCurve{salt: 0}(address(MORPHO), id, preLiquidationParams)));
 
         emit EventsLib.CreatePreLiquidation(address(preLiquidation), id, preLiquidationParams);
 
